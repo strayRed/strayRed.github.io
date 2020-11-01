@@ -2,7 +2,7 @@
 title: C Storage Classes
 author: strayRed
 date: 2020-11-01 18:50:00 +0800
-categories: [Objective-C]
+categories: [objective-c]
 tags: [objective-c]
 ---
 
