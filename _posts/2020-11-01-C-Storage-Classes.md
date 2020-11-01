@@ -4,8 +4,6 @@ author: strayRed
 date: 2020-11-01 18:50:00 +0800
 categories: [Objective-C]
 tags: [Objective-C]
-math: true
-image: 
 ---
 
 在 C 语言中，程序内变量或函数的 *作用域（scope）* 和 *寿命（lifetime）* 是由其 *存储类（storage class）* 确定的。每个变量都具有生存周期，或存储其值的上下文。方法，同变量一样，也存在或可见于一个特殊的范围里，这就决定了哪一部分程序知道且能够访问它们。
