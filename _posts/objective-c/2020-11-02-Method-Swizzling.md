@@ -3,12 +3,12 @@ title: Method Swizzling
 author: strayRed
 date: 2020-11-02 20:31:00 +0800
 categories: [objective-c]
-tags: [objective-c, runtime]
+tags: [objective-c]
 ---
 
 `Objective-C` 中的方法其实是`C`的一个结构体，类型为`Method`，它是`objc_method`结构体的类型别名。
 
-```objc
+```c
 struct objc_method {
      SEL method_name         OBJC2_UNAVAILABLE;
      char *method_types      OBJC2_UNAVAILABLE;
@@ -34,63 +34,67 @@ method_exchangeImplementations(Method methodA, Method methodB);
 - method_name：方法名，`SEL` 是 `objc_selector`类型的结构体，广义上来说，它可以完全被理解为一个 char * 类型，也就是方法名的字符串，我们可以使用 `@selector(...)`将一个`NSString`转换为相应的`SEL`。
 
 - method_types：方法参数和返回值的[编码方式](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html)，它是一个C的字符串类型，数据类型都根据特定的编码方式做了转换，字符串的顺序是*返回值类型编码* + *参数类型编码*。对于方法的实现`IMP`而言，它的头两个参数是固定的，同时也是被隐藏的，一个是`id`类型，任意对象，也就是消息的接受者，二是`SEL`类型，所以对于一个没有返回值也没有参数的方法而言，它的编码为`v@:`，v = void，@ = Class，: = SEL。可以使用`@ecode(...)`传入一个类型的实例来获取对应的类型编码，还可以使用 `method_getTypeEncoding`来获取指定`Method`的编码方式。
-
-  ```objc
+```objc
   char * method_getTypeEncoding(Method aMethod);
-  ```
-
+```
 - method_imp：它是一个函数指针，指向实际的方法实现，方法有两个隐藏的参数，分别为消息的接受者和方法名。所以`IMP`类型被定义为 `id (*IMP)(id, SEL, …)`。可以使用`method_getImplementation`来获取指定`Method`的`IMP`，还可以使用`method_setImplementation`来替换掉指定`Method`的`IMP`。
 
-  ```objc
+```objective-c
   IMP method_getImplementation(Method aMethod);
   //RETURN:- The original Imp
   IMP method_setImplementation(Method method, IMP imp);
-  ```
+```
+
+
+
+
 
  # The incorrect way to swizzle
-
-一般而言，我们会使用下面的方式进行 `swizzle`。
-
-```objc
+一般而言，我们会使用下面的方式进行 `swizzle`
+```objective-c
 @implementation UIViewController (Tracking)
 //这个方法是在同一个类中，使用swizzle_viewWillAppear替换viewWillAppear
-+ (void)load {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        Class class = [self class];
-        SEL originalSelector = @selector(viewWillAppear:);
-        SEL swizzledSelector = @selector(swizzle_viewWillAppear:);
-        Method originalMethod = class_getInstanceMethod(class, originalSelector);
-        Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
-        
-        //这个代码是给当前calss添加一个viewWillAppear:方法，并用swizzled方法实现替换。
-        //比如有些子类没有实现viewWillAppear:，这样也可以达到swizzled的目的
-        BOOL didAddMethod =
-            class_addMethod(class,
-                originalSelector,
-                method_getImplementation(swizzledMethod),
-                method_getTypeEncoding(swizzledMethod));
 
-        if (didAddMethod) {
-        //添加成功后就将xxx_viewWillAppear的实现换成原viewWillAppear:的实现
-            class_replaceMethod(class,
-                swizzledSelector,
-                method_getImplementation(originalMethod),
-                method_getTypeEncoding(originalMethod));
-        } else {
-        //没有成功添加就说明该类中两个方法都存在了，直接调用exchangeImplementations交换
-            method_exchangeImplementations(originalMethod, swizzledMethod);
-        }
-    });
-}
-#pragma mark - Method Swizzling
++ (void)load {
+   static dispatch_once_t onceToken;
+   dispatch_once(&onceToken, ^{
+       Class class = [self class];
+       SEL originalSelector = @selector(viewWillAppear:);
+       SEL swizzledSelector = @selector(swizzle_viewWillAppear:);
+       Method originalMethod = class_getInstanceMethod(class, originalSelector);
+       Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
+       
+   
+   //这个代码是给当前calss添加一个viewWillAppear:方法，并用swizzled方法实现替换。
+   //比如有些子类没有实现viewWillAppear:，这样也可以达到swizzled的目的
+   
+   BOOL didAddMethod =
+       class_addMethod(class,
+           originalSelector,
+           method_getImplementation(swizzledMethod),
+           method_getTypeEncoding(swizzledMethod));
+   
+   if (didAddMethod) {
+   //添加成功后就将xxx_viewWillAppear的实现换成原viewWillAppear:的实现
+       class_replaceMethod(class,
+           swizzledSelector,
+           method_getImplementation(originalMethod),
+           method_getTypeEncoding(originalMethod));
+  
+      } else {
+       //没有成功添加就说明该类中两个方法都存在了，直接调用exchangeImplementations交换
+          method_exchangeImplementations(originalMethod, swizzledMethod);
+   }
+});
+   }
+   #pragma mark - Method Swizzling
 
 //这里的调用并不会引起死循环。
 //因为这个方法的实现已经变成了viewWillAppear:
 //viewWillAppear的实现变成了这里的内容，即原来的 viewWillAppear代码 + 新加入的代码。
 - (void)swizzle_viewWillAppear:(BOOL)animated {
-    [self swizzle_viewWillAppear:animated];
-    NSLog(@"viewWillAppear: %@", self);
+  [self swizzle_viewWillAppear:animated];
+   NSLog(@"viewWillAppear: %@", self);
 }
 @end
 ```
@@ -107,6 +111,7 @@ Method viewWillAppear { //this is the original Method struct. we want to switch 
      IMP method_imp = 0x1234AABA (MyBundle`[UIViewController swizzle_viewWillAppear])
  }
 ```
+
 
 而交换后的`swizzle_viewWillAppear:`的`Method`结构体`则会是这样：
 
@@ -195,7 +200,6 @@ IMP anImp; //represents objective-c function
 * 如果子类没有实现`+initialize`方法，会调用父类的`+initialize`(所以父类的`+initialize`方法可能会被调用多次)
 * 如果分类实现了`+initialize`，会覆盖类本身的`+initialize`调用。
 ## 相同点
-
 * 在不考虑开发者主动使用的情况下，系统最多会调用一次
 
 * 如果父类和子类都被调用，父类的调用一定在子类之前
@@ -228,7 +232,6 @@ IMP anImp; //represents objective-c function
 
 * 由于initialize的这些特点，使得其应用比load要略微广泛一些。可用来做一些初始化工作，或者单例模式的一种实现方案。
 
-  
 
   > 如果存在这样的关系 `SubClass2: SubClass: SuperClass`，那么如果只有`SuperClass`实现了initialize，那么这个initialize会被调用三次。
   >
