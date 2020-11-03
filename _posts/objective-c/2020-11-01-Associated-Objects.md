@@ -19,13 +19,13 @@ tags: [objective-c]
 
 # Associative Object Behaviors
 
-|            **Behavior**             | `@property` **Equivalent**                            | **Description**                                              |
-| :---------------------------------: | ----------------------------------------------------- | ------------------------------------------------------------ |
-|       OBJC_ASSOCIATION_ASSIGN       | @property (assign)` or `@property (unsafe_unretained) | Specifies a weak(unsafe) reference to the associated object. |
-| `OBJC_ASSOCIATION_RETAIN_NONATOMIC` | @property (nonatomic, strong)                         | Specifies a strong reference to the associated object, and that the association is not made atomically. |
-|  `OBJC_ASSOCIATION_COPY_NONATOMIC`  | @property (nonatomic, copy)                           | Specifies that the associated object is copied, and that the association is not made atomically. |
-|       OBJC_ASSOCIATION_RETAIN       | @property (atomic, strong)                            | Specifies a strong reference to the associated object, and that the association is made atomically. |
-|        OBJC_ASSOCIATION_COPY        | @property (atomic, copy)                              | Specifies that the associated object is copied, and that the association is made atomically. |
+|           **Behavior**            | @property **Equivalent**                            | **Description**                                              |
+| :-------------------------------: | ----------------------------------------------------- | ------------------------------------------------------------ |
+|      OBJC_ASSOCIATION_ASSIGN      | @property (assign) or @property (unsafe_unretained) | Specifies a weak(unsafe) reference to the associated object. |
+| OBJC_ASSOCIATION_RETAIN_NONATOMIC | @property (nonatomic, strong)                         | Specifies a strong reference to the associated object, and that the association is not made atomically. |
+|  OBJC_ASSOCIATION_COPY_NONATOMIC  | @property (nonatomic, copy)                           | Specifies that the associated object is copied, and that the association is not made atomically. |
+|      OBJC_ASSOCIATION_RETAIN      | @property (atomic, strong)                            | Specifies a strong reference to the associated object, and that the association is made atomically. |
+|       OBJC_ASSOCIATION_COPY       | @property (atomic, copy)                              | Specifies that the associated object is copied, and that the association is made atomically. |
 
 使用 `OBJC_ASSOCIATION_ASSIGN` 在关联对象的引用计数为0时会出现野指针。
 ## 生命周期
