@@ -8,7 +8,7 @@ tags: [objective-c]
 
 `Objective-C` 中的方法其实是`C`的一个结构体，类型为`Method`，它是`objc_method`结构体的类型别名。
 
-```c
+```C
 struct objc_method {
      SEL method_name         OBJC2_UNAVAILABLE;
      char *method_types      OBJC2_UNAVAILABLE;
@@ -129,7 +129,7 @@ Method swizzle_viewWillAppear { //this is the swizzle Method struct. We want thi
 
 不是创建一个`Objective-C`方法`-[(void) swizzle_originalMethodName]`，而是根据`IMP`的定义创建一个相同签名的`C`方法作为新的`IMP`指针进行替换。
 
-```c
+```C
 void __Swizzle_OriginalMethodName(id self, SEL _cmd)
  {
       //code

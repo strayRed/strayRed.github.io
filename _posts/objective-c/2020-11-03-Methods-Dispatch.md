@@ -37,7 +37,7 @@ objc_msgSend(object, @selector(message), withAnArgument);
 
 Swift 中的值类型不能被继承，也就是说值类型的方法实现不能被修改或者被复写，因此值类型的方法满足静态派发的要求。
 
-```swift
+```Swift
 protocol Noisy {
      func makeNoise() -> Int  //函数表派发
 }
@@ -77,7 +77,7 @@ struct rectangle {
 
 声明一个静态C函数，传入原本方法的调用者。
 
-```c
+```C
 static void directFunction(MyClass *__unsafe_unretained object);
 ```
 
