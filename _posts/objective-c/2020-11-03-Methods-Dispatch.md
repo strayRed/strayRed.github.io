@@ -10,13 +10,13 @@ tags: [objective-c, swift]
 
 `Objective-C`程序的实现就是一系列对象通过方法（消息）来进行交互，使用下面这个语法：
 
-```objc
+```ObjectiveC
 [someObject aMethod:withAnArgument];
 ```
 
 此外，我们也可以使用`objc_msgSend`这个c方法来进行消息的发送。
 
-```objc
+```ObjectiveC
 objc_msgSend(object, @selector(message), withAnArgument);
 ```
 
@@ -69,7 +69,7 @@ struct rectangle {
 
 在`Objective-C`中，我们也可以使用C函数来达到直接派发的目的。
 
-```objc
+```ObjectiveC
 @interface MyClass: NSObject
 - (void)dynamicMethod;
 @end
@@ -81,7 +81,7 @@ struct rectangle {
 static void directFunction(MyClass *__unsafe_unretained object);
 ```
 
-```objc
+```ObjectiveC
 MyClass *object = [[[MyClass] alloc] init];
 
 // Dynamic Dispatch
@@ -101,7 +101,7 @@ directFunction(object);
 
 更方便的是，我们可以使用`objc_direct` 关键字来标示方法，让它可以被直接派发。对于属性，可以为其添加`direct`关键字，让其`getter`和`stter`函数变为直接派发。
 
-```objc
+```ObjectiveC
 @interface MyClass: NSObject
 @property(nonatomic) BOOL dynamicProperty;
 @property(nonatomic, direct) BOOL directProperty;
@@ -122,7 +122,7 @@ directFunction(object);
 
 此外，我们也可以在分类和类扩展前使用`objc_direct_members`让所有声明的属性和方法实现动态派发。
 
-```objc
+```ObjectiveC
 __attribute__((objc_direct_members))
 @interface MyClass ()
 @property (nonatomic) BOOL directExtensionProperty;
@@ -132,7 +132,7 @@ __attribute__((objc_direct_members))
 
 在`@implementation`之前使用`__attribute__((objc_direct_members))`也有同样的效果，不过仅限于在`@implementation`代码块中声明的方法。
 
-```objc
+```ObjectiveC
 __attribute__((objc_direct_members))
 @implementation MyClass
 - (BOOL)directProperty {…}

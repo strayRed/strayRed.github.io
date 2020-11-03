@@ -10,7 +10,7 @@ tags: [objective-c]
 
 使用这个关键字的语法是 `__attribute__` 后面跟两组括号（两个括号可以让它很容易在宏里面使用，特别是有多个属性的时候）。在括号里面是用逗号分隔的属性列表。`__attribute__` 指令可以放在函数，变量和类型声明之后。
 
-```objc
+```ObjectiveC
 // Return the square of a number
 int square(int n) __attribute__((const));
 

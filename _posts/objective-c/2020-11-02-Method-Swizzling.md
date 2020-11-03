@@ -17,7 +17,7 @@ struct objc_method {
 ```
 我们可以使用`objc/runtime`的 `class_getClassMethod`方法来获取一个`Method`。还可对对象的方法进行添加或者替换。
 
-```objc
+```ObjectiveC
 //获取类方法（从元类中获取）
 Method class_getClassMethod(Class aClass, SEL aSelector);
 //获取实例方法（从类中获取）
@@ -34,12 +34,12 @@ method_exchangeImplementations(Method methodA, Method methodB);
 - method_name：方法名，`SEL` 是 `objc_selector`类型的结构体，广义上来说，它可以完全被理解为一个 char * 类型，也就是方法名的字符串，我们可以使用 `@selector(...)`将一个`NSString`转换为相应的`SEL`。
 
 - method_types：方法参数和返回值的[编码方式](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html)，它是一个C的字符串类型，数据类型都根据特定的编码方式做了转换，字符串的顺序是*返回值类型编码* + *参数类型编码*。对于方法的实现`IMP`而言，它的头两个参数是固定的，同时也是被隐藏的，一个是`id`类型，任意对象，也就是消息的接受者，二是`SEL`类型，所以对于一个没有返回值也没有参数的方法而言，它的编码为`v@:`，v = void，@ = Class，: = SEL。可以使用`@ecode(...)`传入一个类型的实例来获取对应的类型编码，还可以使用 `method_getTypeEncoding`来获取指定`Method`的编码方式。
-```objc
+```ObjectiveC
   char * method_getTypeEncoding(Method aMethod);
 ```
 - method_imp：它是一个函数指针，指向实际的方法实现，方法有两个隐藏的参数，分别为消息的接受者和方法名。所以`IMP`类型被定义为 `id (*IMP)(id, SEL, …)`。可以使用`method_getImplementation`来获取指定`Method`的`IMP`，还可以使用`method_setImplementation`来替换掉指定`Method`的`IMP`。
 
-```objective-c
+```ObjectiveC
   IMP method_getImplementation(Method aMethod);
   //RETURN:- The original Imp
   IMP method_setImplementation(Method method, IMP imp);
@@ -51,7 +51,7 @@ method_exchangeImplementations(Method methodA, Method methodB);
 
  # The incorrect way to swizzle
 一般而言，我们会使用下面的方式进行 `swizzle`
-```objective-c
+```ObjectiveC
 @implementation UIViewController (Tracking)
 //这个方法是在同一个类中，使用swizzle_viewWillAppear替换viewWillAppear
 
@@ -103,7 +103,7 @@ method_exchangeImplementations(Method methodA, Method methodB);
 
 `IMP`交换完成后，原来的 `viewWillAppear:` 的`Method`结构体会是这样：
 
-```objc
+```ObjectiveC
 Method viewWillAppear { //this is the original Method struct. we want to switch this one with
              //our replacement method
      SEL method_name = @selector(viewWillAppear:)
@@ -115,7 +115,7 @@ Method viewWillAppear { //this is the original Method struct. we want to switch 
 
 而交换后的`swizzle_viewWillAppear:`的`Method`结构体`则会是这样：
 
-```objc
+```ObjectiveC
 Method swizzle_viewWillAppear { //this is the swizzle Method struct. We want this method //executed when [UIViewController viewWillAppear] is called
      SEL method_name = @selector(swizzle_viewWillAppear:)
      char *method_types = "B@:"
@@ -138,13 +138,13 @@ void __Swizzle_OriginalMethodName(id self, SEL _cmd)
 
 这样就可以将这个方法指针转换为`IMP`
 
-```objc
+```ObjectiveC
 IMP swizzleImp = (IMP)__Swizzle_OriginalMethodName;
 ```
 
 下面是完整的过程
 
-```objc
+```ObjectiveC
 @interface SwizzleExampleClass : NSObject
  - (void) swizzleExample;
  - (int) originalMethod;
@@ -186,7 +186,7 @@ int _replacement_Method(id self, SEL _cmd)
 
 此外，在`ARC`中，系统会默认`IMP`的返回值为`id`类型，所以当自定义的c方法的返回值为`void`，我们需要进行强制类型转换，防止`ARC`对`void`的强引用。
 
-```objc
+```ObjectiveC
 IMP anImp; //represents objective-c function
           // -UIViewController viewDidLoad;
  ((void(*)(id,SEL))anImp)(self,_cmd); //call with a cast to prevent

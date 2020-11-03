@@ -36,7 +36,7 @@ C中有四种存储类：
 ## 静态单例
 
 OC中的一个常见的模式，使用类方法这一形式，暴露出函数中的`static` 变量供外部访问。`dispatch once` 用于保证变量初始化在一个线程安全的方式下只发生一次：
-```objective-c
+```ObjectiveC
 + (instancetype)sharedInstance {
   static id _sharedInstance = nil;
   static dispatch_once_t onceToken;
