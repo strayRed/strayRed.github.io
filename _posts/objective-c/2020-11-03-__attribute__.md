@@ -29,7 +29,7 @@ extern void die(const char *format, ...)
 
 `format` 属性用于指定一个函数接收类似 `printf`， `scanf`， `strftime` 和 `strfmon` 风格的参数，应该按照参数对格式化字符串进行类型检查。
 
-```c
+```C
 // 这里是第二个和第三个参数使用printf的格式检查
 extern int
 my_printf (void *my_object, const char *my_format, ...)
@@ -42,7 +42,7 @@ Objective-C 程序员还可以使用 `__NSString__` 来应用跟 `NSString +stri
 
 `nonnull` 属性表明一些函数参数应该是非空的指针。
 
-```c
+```C
 // 这里是第一个和第二个参数不为空指针
 extern void *
 my_memcpy (void *dest, const void *src, size_t len)
