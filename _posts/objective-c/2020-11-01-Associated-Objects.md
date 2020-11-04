@@ -2,8 +2,8 @@
 title: Associated Objects
 author: strayRed
 date: 2020-11-01 15:24:00 +0800
-categories: [objective-c]
-tags: [objective-c]
+categories: [ios, objective-c]
+tags: [ios, objective-c]
 ---
 对象关联（或称为关联引用）本来是 `Objective-C 2.0` 运行时的一个特性，起始于 `OS X Snow Leopard` 和 `iOS 4` 。相关参考可以查看  `<objc/runtime.h>`  中定义的以下三个允许你将任何键值在运行时关联到对象上的函数：
 

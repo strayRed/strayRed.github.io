@@ -2,8 +2,8 @@
 title: Methods Dispatch
 author: strayRed
 date: 2020-11-03 16:19:00 +0800
-categories: [objective-c, swift]
-tags: [objective-c, swift]
+categories: [ios, objective-c]
+tags: [ios, objective-c, swift]
 ---
 
 # Message Dispatch and the Objective-C Runtime
@@ -22,7 +22,7 @@ objc_msgSend(object, @selector(message), withAnArgument);
 
 对于`SEL`对应的`IMP`指针指向的方法，同样，含有两个隐藏的参数，`id`和`SEL`类型，它们的值为当前消息的接受者和当前消息的`selector`。
 
-`Objective-C`的方法调度是动态的，每一个对象（类也是对象）都维护着一个`dispatch table`为了在程序运行时进行方法的查找。这个表的每一个条目都是一个`Method`结构体，它将`SEL`到`IMP`进行了映射。当一个对象收到消息时，它首先会查找它的调度表（分类的相同`seletor`会覆盖本类），找到就直接调用对应的实现，未找到就会调用相关的转发函数，再未找到就会查询父类，直到查找到根类（`NSObject`）或者根元类(`NSObject元类`)，最后没找到就会crash。
+`Objective-C`的方法调度是动态的，每一个对象（类也是对象）都维护着一个`dispatch table`为了在程序运行时进行方法的查找。这个表的每一个条目都是一个`Method`结构体，它将`SEL`到`IMP`进行了映射。当一个对象收到消息时，它首先会查找它的类的调度表（分类的相同`seletor`会覆盖本类），找到就直接调用对应的实现，未找到就会调用相关的转发函数，再未找到就会查询类的父类，直到查找到根类（`NSObject`或 `NSObject元类`），最后没找到就会crash。
 
 对于`Objective-C`，函数派发都是基于消息派发的，这种机制极具动态性，既可以通过`swizzling`修改函数的实现，也可以通过 `isa-swizzling`修改对象。整个派发过程中的方法都会被缓存，从而提高效率。
 
@@ -31,6 +31,11 @@ objc_msgSend(object, @selector(message), withAnArgument);
 与 `Message Dispatch`类似，`Table Dispatch`同样也是每一个类维护者一个函数表，大部分语言把这个称为 `virtual table`(虚函数表)，Swift 里称为 `witness table`，面记录着类所有的函数，用指针标识，。同时子类在创建时也会创建一个函数表，如果函数是 `override` 的，则使用一个新的指针，用于区分父类中相同函数的指针。如果这个函数是父类中有且没被 `override`的，则存储的就是原先的（父类的）指针。
 
 与 `Message Dispatch`不同的是，`Table Dispatch`只会查找当前类的方法，因为继承关系，子类会直接继承父类的函数指针（如果这个函数没有被重写），调用父类的方法就会直接跳转，而不是在父类的方法表中进行查找。
+
+> 这是因为`Objective-C`是一门动态性很强的语言，在运行时方法的`IMP`指针可能会被替换，所以OC使用selector指针而不是方法指针作为唯一标示。如此，子类是无法直接继承父类的函数指针的，那么只能父类和子类分别维护自己的函数表，在方法查找的时候逐一通过 selector 指针进行比对。
+>
+> 。对于一些非动态语言，如Swift，因为其同样拥有OOP的特性，对于部分类和协议方法仍然是使用了函数表派发，但是其函数的指针在编译时就能够确定，我们可以使用函数指针作为唯一标示，并且子类可以继承父类的函数表，从而提高效率。
+
 # Direct Dispatch
 
 直接派发也叫静态派发。在直接派发中，编译器直接找到相关指令的位置。当函数调用时，系统直接跳转到函数的内存地址执行操作。这样的好处就是执行快，同时允许编译器能够执行例如内联等优化。事实上，编译期在编译阶段为了能够获取最大的性能提升，都尽量将函数静态化。不过静态派发是有条件的，方法内部的代码必须对编译器透明，并且在运行时不能被更改，这样编译器才能帮助我们。

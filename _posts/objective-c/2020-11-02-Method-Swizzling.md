@@ -2,8 +2,8 @@
 title: Method Swizzling
 author: strayRed
 date: 2020-11-02 20:31:00 +0800
-categories: [objective-c]
-tags: [objective-c]
+categories: [ios, objective-c]
+tags: [ios, objective-c]
 ---
 
 `Objective-C` 中的方法其实是`C`的一个结构体，类型为`Method`，它是`objc_method`结构体的类型别名。
