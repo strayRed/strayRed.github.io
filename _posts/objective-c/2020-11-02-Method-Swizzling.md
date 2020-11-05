@@ -34,21 +34,16 @@ method_exchangeImplementations(Method methodA, Method methodB);
 - method_name：方法名，`SEL` 是 `objc_selector`类型的结构体，广义上来说，它可以完全被理解为一个 char * 类型，也就是方法名的字符串，我们可以使用 `@selector(...)`将一个`NSString`转换为相应的`SEL`。
 
 - method_types：方法参数和返回值的[编码方式](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html)，它是一个C的字符串类型，数据类型都根据特定的编码方式做了转换，字符串的顺序是*返回值类型编码* + *参数类型编码*。对于方法的实现`IMP`而言，它的头两个参数是固定的，同时也是被隐藏的，一个是`id`类型，任意对象，也就是消息的接受者，二是`SEL`类型，所以对于一个没有返回值也没有参数的方法而言，它的编码为`v@:`，v = void，@ = Class，: = SEL。可以使用`@ecode(...)`传入一个类型的实例来获取对应的类型编码，还可以使用 `method_getTypeEncoding`来获取指定`Method`的编码方式。
-```ObjectiveC
+```Objective-C
   char * method_getTypeEncoding(Method aMethod);
 ```
 - method_imp：它是一个函数指针，指向实际的方法实现，方法有两个隐藏的参数，分别为消息的接受者和方法名。所以`IMP`类型被定义为 `id (*IMP)(id, SEL, …)`。可以使用`method_getImplementation`来获取指定`Method`的`IMP`，还可以使用`method_setImplementation`来替换掉指定`Method`的`IMP`。
 
-```ObjectiveC
+```Objective-C
   IMP method_getImplementation(Method aMethod);
   //RETURN:- The original Imp
   IMP method_setImplementation(Method method, IMP imp);
 ```
-
-
-
-
-
  # The incorrect way to swizzle
 一般而言，我们会使用下面的方式进行 `swizzle`
 ```ObjectiveC
@@ -119,7 +114,7 @@ Method viewWillAppear { //this is the original Method struct. we want to switch 
 Method swizzle_viewWillAppear { //this is the swizzle Method struct. We want this method //executed when [UIViewController viewWillAppear] is called
      SEL method_name = @selector(swizzle_viewWillAppear:)
      char *method_types = "B@:"
-     IMP method_imp = 0x000FFFF (MyBundle`[MyClass viewWillAppear])
+     IMP method_imp = 0x000FFFF (MyBundle`[UIViewController viewWillAppear])
  }
 ```
 

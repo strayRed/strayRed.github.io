@@ -91,7 +91,7 @@ int square(int n) __attribute__((const));
 + (void) __attribute__((noreturn)) networkRequestThreadEntryPoint:(id)__unused object;
 ```
 
-## LLVM
+# LLVM
 
 和其他 GCC 特性一样，Clang 支持了 `__attribute__`， 还加入了一小部分扩展特性。
 
