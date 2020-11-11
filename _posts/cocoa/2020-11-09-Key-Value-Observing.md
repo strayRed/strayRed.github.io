@@ -1,5 +1,5 @@
 ---
-title:Key-Value Observing
+title:Key Value Observing
 author: strayRed
 date: 2020-11-09 16:30:00 +0800
 categories: [ios, cocoa]
@@ -156,7 +156,7 @@ NSStringFromSelector(@selector(isFinished))
 
 当一个观察者完成了监听一个对象的改变，需要调用 `–removeObserver:forKeyPath:context:`。它经常在 `-observeValueForKeyPath:ofObject:change:context:`，或者 `-dealloc` 中被调用。
 
-## Safe Unsubscribe with `@try` / `@catch`
+## Safe Unsubscribe with @try / @catch
 
 如果你调用 `–removeObserver:forKeyPath:context:` 当这个对象没有被注册为观察者（因为它已经解注册了或者开始没有注册），抛出一个异常。有意思的是，没有一个内建的方式来检查对象是否注册。 这就会导致我们需要用一种相当不好的方式 `@try` 和一个没有处理的 `@catch`：
 
