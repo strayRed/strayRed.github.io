@@ -44,7 +44,7 @@ method_exchangeImplementations(Method methodA, Method methodB);
   //RETURN:- The original Imp
   IMP method_setImplementation(Method method, IMP imp);
 ```
- # The incorrect way to swizzle
+# The incorrect way to swizzle
 一般而言，我们会使用下面的方式进行 `swizzle`
 ```ObjectiveC
 @implementation UIViewController (Tracking)
