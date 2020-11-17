@@ -14,7 +14,7 @@ Date的另一个混淆之处在于，尽管代表了绝对时间点，但是它�
 
 # Date Intervals and Time Intervals
 
-`DateInterval`是 Foundation 的新增类型。 在iOS 10 和 macOS Sierra 中引入的这种类型表示两个绝对时间点之间的闭合间隔（a closed interval）这再次与 TimeInterval 相反，TimeInterval 以秒为单位表示持续时间。
+`DateInterval`是 Foundation 的新增类型。 在**iOS 10** 和 macOS Sierra 中引入的这种类型表示两个绝对时间点之间的闭合间隔（a closed interval）这再次与 TimeInterval 相反，TimeInterval 以秒为单位表示持续时间。
 
 ## Getting the Date Interval of a Calendar Unit
 
