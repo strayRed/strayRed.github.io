@@ -42,7 +42,7 @@ calendar.dateComponents([.year, .month, .day], from: date)
 >
 >  NSCalendar与NSDateComponents类密切相关，NSDateComponents的实例描述了日历计算所需日期的组成元素。日历则由由NSLocale中的常量指定。 您可以使用NSCalendar方法currentCalendar最轻松地获取用户首选语言环境的日历。 您还可以使用键NSLocaleCalendar从任何NSLocale对象获取默认日历。
 >
->  此外，如果使用 NSDateFormatter 本地化输出 NSDate，那么可以设置 NSDateFormatter的 locale 属性。
+>  此外，如果使用 NSDateFormatter 本地化输出 NSDate，那么可以设置 NSDateFormatter的 `timeZone` 以及`timeZone`  属性。
 
 DateComponents 由以下元素组成：
 

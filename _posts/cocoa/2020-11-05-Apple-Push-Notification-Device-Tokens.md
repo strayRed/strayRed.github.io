@@ -47,6 +47,8 @@ NSString *token = [[[[deviceToken description]
 目前还不清楚为什么通知服务的提供商会使用16进制的数据来作为`token`。不过近10年来相当大比例的应用程序都是这样做的。
 
 > 实际上，将二进制数据转化为字符串有很多种方法，一般来讲，比较常用的是`Base64`（也就是64个可打印的字符串），或者[Ascii85 ](https://en.wikipedia.org/wiki/Ascii85)，再或是 `Base16 Encoding`（*这个Base16指的是将二进制数据以8bit为单位[也就是1字节]分别转换为16进制，与Base64意义不同*）。如果我们需要``Base16`编码的`deviceToken`，那么可以采用上述的做法。
+>
+> 对于 Unicode字符集而言，我们通常也有3种编码方式，我们称之为Unicode标量，其根据编码方式不同，其长度也会不同。一般的Unicode字符串转换为二进制data数据采用 utf8的编码方式。NSString 在内存中存储是使用的utf16，Swift的String则默认使用的utf32，不过也可以访问其他形式编码的数据。
 
 # Relitigating the Past with Swift 3
 

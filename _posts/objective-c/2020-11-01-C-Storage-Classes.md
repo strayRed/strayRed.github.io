@@ -71,6 +71,14 @@ AppDelegate.m
 //在m文件中实现
 NSString * const kAppErrorDomain = @"com.example.yourapp.error";
 ```
+> 使用 extern 来声明 key 或者 notification name 的时候，习惯将 NSString 进行类型别名，方便开发者辨识。
+>
+> ```Objective-C
+> typedef NSString *NSNotificationName NS_EXTENSIBLE_STRING_ENUM;
+> //UIKIT_EXTERN只是在extern的基础上增加了兼容性
+> UIKIT_EXTERN NSNotificationName const CacheControllerDidClearCacheNotification;
+> ```
+
 ## 公共方法
 
 一些 API 可能会想要公开曝光一些辅助方法。出于仅提供辅助而与具体状态无关的考虑，用方法来封装这些行为是一个很好的方式，而且如果特别有用，还可能值得使其全局可用。
