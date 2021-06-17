@@ -34,41 +34,13 @@ objc_msgSend(object, @selector(message), withAnArgument);
 
 > 这是因为`Objective-C`是一门动态性很强的语言，在运行时方法的`IMP`指针可能会被替换，所以OC使用selector指针而不是方法指针作为唯一标示。如此，子类是无法直接继承父类的函数指针的，那么只能父类和子类分别维护自己的函数表，在方法查找的时候逐一通过 selector 指针进行比对。
 >
-> 。对于一些非动态语言，如Swift，因为其同样拥有OOP的特性，对于部分类和协议方法仍然是使用了函数表派发，但是其函数的指针在编译时就能够确定，我们可以使用函数指针作为唯一标示，并且子类可以继承父类的函数表，从而提高效率。
+> 。对于一些非动态语言，如Swift，因为其同样拥有OOP的特性，对于部分类方法仍然是使用了函数表派发，但是其函数的指针在编译时就能够确定，我们可以使用函数指针作为唯一标示，并且子类可以继承父类的函数表，从而提高效率。
 
 # Direct Dispatch
 
 直接派发也叫静态派发。在直接派发中，编译器直接找到相关指令的位置。当函数调用时，系统直接跳转到函数的内存地址执行操作。这样的好处就是执行快，同时允许编译器能够执行例如内联等优化。事实上，编译期在编译阶段为了能够获取最大的性能提升，都尽量将函数静态化。不过静态派发是有条件的，方法内部的代码必须对编译器透明，并且在运行时不能被更改，这样编译器才能帮助我们。
 
 Swift 中的值类型不能被继承，也就是说值类型的方法实现不能被修改或者被复写，因此值类型的方法满足静态派发的要求。
-
-```Swift
-protocol Noisy {
-     func makeNoise() -> Int  //函数表派发
-}
-
-extension Noisy {
-    func makeNoise() -> Int { return 0 }  //函数表派发
-    func isAnnoying() -> Bool { return true}  //直接派发
-}
-
-class Animal: Noisy {
-    func makeNoise() -> Int { return 1 } //函数表派发
-    func isAnnoying() -> Bool { return false } //函数表派发
-    @objc func sleep() {} //函数表派发
-}
-
-extension Animal {
-    func eat() {} //直接派发
-    @objc func getWild() {} //消息派发
-}
-
-struct rectangle {
-    func getArea() { } //直接派发
-}
-```
-
-
 
 # Direct Dispatch with a C Function
 
