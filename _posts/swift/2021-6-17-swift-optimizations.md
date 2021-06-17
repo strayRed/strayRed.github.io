@@ -1,5 +1,5 @@
 ---
-title: swift optimizations
+title: Swift Optimizations
 author: strayRed
 date: 2021-6-17 19:02:00 +0800
 categories: [ios, swift]
@@ -117,7 +117,7 @@ struct Attachment {
 
 在存在容器的`value buffer`之后，就会存储该类型的`Value Witness Table`指针，再之后就会存储`Protocol Witness Table`指针。
 
-```c
+```Swift
 []    
 []    inline value buffer
 []

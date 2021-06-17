@@ -1,5 +1,5 @@
 ---
-title: dictionary optimizations
+title: Dictionary Optimizations
 author: strayRed
 date: 2021-3-23 21:12:00 +0800
 categories: [ios, swift]
