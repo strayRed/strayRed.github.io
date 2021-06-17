@@ -12,7 +12,7 @@ Copy on write is a tricky thing, and you need to think carefully about how many 
 
 所以需要将下列代码
 
-```swift
+```Swift
 if countToColorMap[colorCount] != nil {
     countToColorMap[colorCount]?.append(CountedColor(color: color as! UIColor, colorCount: colorCount))
 } else {
@@ -22,7 +22,7 @@ if countToColorMap[colorCount] != nil {
 
 替换为
 
-```swift
+```Swift
 //删除掉元字典中的引用，确保元素修改时只会存在一个引用
 var countForColor = countToColorMap.removeValue(forKey: colorCount) ?? []
 countForColor.append(CountedColor(color: color as! UIColor, colorCount: colorCount))
@@ -33,7 +33,7 @@ countToColorMap[colorCount] = countForColor
 
 如果你的结构体只由其他结构体组成，那编译器可以确保不可变性。同样地，当使用结构体时，编译器也可以生成非常快的代码。举个例子，对一个只含有结构体的数组进行操作的效率，通常要比对一个含有对象的数组进行操作的效率高得多。这是因为结构体通常要更直接：值是直接存储在数组的内存中的。而对象的数组中包含的只是对象的引用。最后，在很多情况下，编译器可以将结构体放到栈上，而不用放在堆里。
 
-```
+```Swift
 func uniqueIntegerProvider() -> AnyIterator<Int> {
     var i = 0
     return AnyIterator {

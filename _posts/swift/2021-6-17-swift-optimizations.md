@@ -23,7 +23,7 @@ Swift中所有值类型（不含类似`String`的值语义类型），其内存�
 ### Conclusion
 
 对于频繁创建的临时变量而言，使用值类型往往比引用类型更加高效。而对于那些需要频繁赋值的类型，使用引用类型更加正确。
-```swift
+```Swift
 enum Color { case blue, green, gray }
 enum Orientation { case left, right }
 enum Tail { case none, tail, bubble }
@@ -61,7 +61,7 @@ ARC并不是单纯地对整数的增减，它还会涉及到对象的层级关�
 
 - 也可以使用值类型来替换掉引用类型，从而从根本上防止引用计数的增减。
 
-```swift
+```Swift
 struct Attachment {
  let fileURL: URL
   //使用UUID替换String
@@ -130,7 +130,7 @@ struct Attachment {
 
 如果直接通过`Protocol Type`来作为属性进行存储值，需要考虑到值类型的`large value`会引发堆内存分配，而且因为值类型的特性，`large value`所需要的内存会随着该实例的赋值语句的调用而继续在堆上分配。
 
-```swift
+```Swift
 struct Pair { Supports dynamic polymorphism
  init(_ f: Drawable, _ s: Drawable) {
  first = f ; second = s
@@ -148,7 +148,7 @@ let copy = pair
 
 为了解决上述问题，应该使用引用类型而非值类型来存储`large value`，这样各个存在容器的`value buffer`中都会存储相同额指针，从而减少内存分配的次数。但是这样会使实例之间共享状态，因此需要为该引用类型实现写时复制的特性。
 
-```swift
+```Swift
 class LineStorage { var x1, y1, x2, y2: Double }
 struct Line : Drawable {
  var storage : LineStorage
