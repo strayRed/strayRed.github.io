@@ -107,7 +107,7 @@ struct Attachment {
 
 协议类型的方法多态性是通过`Protocol Witness Table`来实现的，与引用类型的`V-Table`类似，每一个实现了具体协议的具体类型，系统都会创建一个pwt，其包含了该类型的方法相关信息，在实际执行时就会查找对应的table中的具体实现。
 
-而协议类型的类型多态性是通过 Existential Container（存在容器来实现的），任何一个可以单独作为类型接口的协议类型（不含泛型），其在内存中都是通过存在容器进行保存的。
+而协议类型的类型多态性是通过 Existential Container（存在容器）来实现的，任何一个可以单独作为类型接口的协议类型（不含泛型），其在内存中都是通过存在容器进行保存的。
 
 #### Existential Container
 
