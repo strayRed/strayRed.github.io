@@ -1,5 +1,5 @@
 ---
-Efficient Interaction with Frameworks
+title: Efficient Interaction with Frameworks
 author: strayRed
 date: 2021-6-21 23:11:00 +0800
 categories: [ios, cocoa]

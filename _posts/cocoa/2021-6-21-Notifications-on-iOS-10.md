@@ -1,5 +1,5 @@
 ---
-Notification settingstitle: Notifications on iOS 10
+title: Notifications on iOS 10
 author: strayRed
 date: 2021-6-21 19:22:00 +0800
 categories: [ios, cocoa, notification]
